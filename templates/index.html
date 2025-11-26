@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Сравнение смартфонов</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1 align="center">Каталог смартфонов</h1>
+    </header>
+
+    <div class="container">
+        <!-- Кнопка для открытия/закрытия фильтров -->
+        <button class="filter-toggle" onclick="toggleFilters()">▶</button>
+
+        <!-- Боковая панель фильтров -->
+        <div class="filters-sidebar" id="filtersSidebar">
+            <div class="filters-header">
+                <h3>Фильтры</h3>
+                <button class="close-filters" onclick="toggleFilters()">×</button>
+            </div>
+
+            <!-- Поиск по названию -->
+            <div class="filter-group">
+                <label>Поиск по названию</label>
+                <input type="text" id="searchName" placeholder="Введите название..." oninput="filterPhones()">
+            </div>
+
+            <!-- Фильтр по бренду -->
+            <div class="filter-group">
+                <label>Бренд</label>
+                <select id="filterBrand" onchange="filterPhones()">
+                    <option value="">Все бренды</option>
+                    <option value="Apple">Apple</option>
+                    <option value="Samsung">Samsung</option>
+                    <option value="Google">Google</option>
+                    <option value="Xiaomi">Xiaomi</option>
+                    <option value="OnePlus">OnePlus</option>
+                    <option value="Nothing">Nothing</option>
+                    <option value="Huawei">Huawei</option>
+                    <option value="Realme">Realme</option>
+                    <option value="Vivo">Vivo</option>
+                    <option value="Asus">Asus</option>
+                    <option value="Honor">Honor</option>
+                    <option value="Sony">Sony</option>
+                </select>
+            </div>
+
+            <!-- Фильтр по ОС -->
+            <div class="filter-group">
+                <label>Операционная система</label>
+                <select id="filterOS" onchange="filterPhones()">
+                    <option value="">Все ОС</option>
+                    <option value="iOS">iOS</option>
+                    <option value="Android">Android</option>
+                    <option value="One UI">One UI</option>
+                    <option value="HyperOS">HyperOS</option>
+                    <option value="OxygenOS">OxygenOS</option>
+                    <option value="Nothing OS">Nothing OS</option>
+                    <option value="HarmonyOS">HarmonyOS</option>
+                    <option value="Realme UI">Realme UI</option>
+                    <option value="Funtouch OS">Funtouch OS</option>
+                    <option value="ROG UI">ROG UI</option>
+                    <option value="Magic OS">Magic OS</option>
+                </select>
+            </div>
+
+            <!-- Ползунок цены -->
+            <div class="filter-group">
+                <label>Цена, ₽</label>
+                <div class="range-inputs">
+                    <input type="number" id="priceMin" placeholder="От" oninput="filterPhones()">
+                    <span>-</span>
+                    <input type="number" id="priceMax" placeholder="До" oninput="filterPhones()">
+                </div>
+            </div>
+
+            <!-- Ползунок диагонали экрана -->
+            <div class="filter-group">
+                <label>Диагональ экрана, "</label>
+                <div class="range-inputs">
+                    <input type="number" id="screenMin" placeholder="От" step="0.1" oninput="filterPhones()">
+                    <span>-</span>
+                    <input type="number" id="screenMax" placeholder="До" step="0.1" oninput="filterPhones()">
+                </div>
+            </div>
+
+            <!-- Фильтр по году -->
+            <div class="filter-group">
+                <label>Год выпуска</label>
+                <select id="filterYear" onchange="filterPhones()">
+                    <option value="">Все годы</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                </select>
+            </div>
+
+            <!-- Кнопка сброса -->
+            <button class="reset-filters" onclick="resetFilters()">Сбросить фильтры</button>
+        </div>
+
+        <!-- Основной контент с карточками -->
+        <div class="main-content">
+            <div class="phones-grid" id="phonesGrid">
+                {% for phone in phones %}
+                <div class="phone-card"
+                     data-name="{{ phone.name.lower() }}"
+                     data-brand="{{ phone.brand }}"
+                     data-os="{{ phone.os }}"
+                     data-year="{{ phone.year }}"
+                     data-price="{{ phone.price.replace(' ₽', '').replace(' ', '').replace('₽', '').replace(' ', '') }}"
+                     data-screen="{{ phone.screen.split(' ')[-1].replace('\"', '').replace("''", '') }}">
+                    <div class="phone-image"></div>
+                    <div class="phone-info">
+                        <h3 class="phone-name">{{ phone.name }}</h3>
+                        <div class="phone-meta">
+                            <span class="phone-brand">{{ phone.brand }}</span>
+                            <span class="phone-year">{{ phone.year }}</span>
+                        </div>
+                        <div class="phone-specs">
+                            <span class="phone-os">{{ phone.os }}</span>
+                            <span class="phone-screen">{{ phone.screen }}</span>
+                        </div>
+                        <div class="phone-storage">{{ phone.storage }}</div>
+                        <div class="phone-colors">
+                            {% for color in phone.colors %}
+                            <div class="color-dot" style="background-color: {{ color }};" title="Цвет"></div>
+                            {% endfor %}
+                        </div>
+                        <div class="phone-price">{{ phone.price }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
