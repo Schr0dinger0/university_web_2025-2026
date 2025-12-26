@@ -5,6 +5,43 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <!-- Добавляем блок пользователя -->
+    <div class="user-container" id="userContainer">
+        <button id="loginBtn" class="login-btn">Войти</button>
+        <div id="userGreeting" class="user-greeting" style="display: none;">
+            <span id="userNameDisplay"></span>
+            <div class="dropdown-menu">
+                <button id="logoutBtn">Выйти</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно входа/регистрации -->
+    <div id="authModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+
+            <!-- Форма входа -->
+            <div id="loginForm">
+                <h3>Вход</h3>
+                <input type="text" id="loginUsername" placeholder="Логин">
+                <input type="password" id="loginPassword" placeholder="Пароль">
+                <button id="submitLogin">Войти</button>
+                <button id="switchToRegister">Регистрация</button>
+            </div>
+
+            <!-- Форма регистрации -->
+            <div id="registerForm" style="display: none;">
+                <h3>Регистрация</h3>
+                <input type="text" id="registerUsername" placeholder="Логин">
+                <input type="password" id="registerPassword" placeholder="Пароль">
+                <input type="text" id="registerName" placeholder="Имя">
+                <button id="submitRegister">Зарегистрироваться</button>
+                <button id="switchToLogin">Войти в существующий аккаунт</button>
+            </div>
+        </div>
+    </div>
+
     <header>
         <h1 align="center">Каталог смартфонов</h1>
     </header>
@@ -46,22 +83,14 @@
                 </select>
             </div>
 
-            <!-- Фильтр по ОС -->
+             <!-- Фильтр по ОС -->
             <div class="filter-group">
                 <label>Операционная система</label>
                 <select id="filterOS" onchange="filterPhones()">
                     <option value="">Все ОС</option>
                     <option value="iOS">iOS</option>
                     <option value="Android">Android</option>
-                    <option value="One UI">One UI</option>
-                    <option value="HyperOS">HyperOS</option>
-                    <option value="OxygenOS">OxygenOS</option>
-                    <option value="Nothing OS">Nothing OS</option>
                     <option value="HarmonyOS">HarmonyOS</option>
-                    <option value="Realme UI">Realme UI</option>
-                    <option value="Funtouch OS">Funtouch OS</option>
-                    <option value="ROG UI">ROG UI</option>
-                    <option value="Magic OS">Magic OS</option>
                 </select>
             </div>
 
@@ -104,12 +133,13 @@
             <div class="phones-grid" id="phonesGrid">
                 {% for phone in phones %}
                 <div class="phone-card"
+
                      data-name="{{ phone.name.lower() }}"
                      data-brand="{{ phone.brand }}"
                      data-os="{{ phone.os }}"
                      data-year="{{ phone.year }}"
                      data-price="{{ phone.price.replace(' ₽', '').replace(' ', '').replace('₽', '').replace(' ', '') }}"
-                     data-screen="{{ phone.screen.split(' ')[-1].replace('\"', '').replace("''", '') }}">
+                     data-screen="{{ phone.screen.split(' ')[-1].replace('&quot;', '').replace('&apos;&apos;', '') }}">
                     <div class="phone-image"></div>
                     <div class="phone-info">
                         <h3 class="phone-name">{{ phone.name }}</h3>
@@ -118,7 +148,7 @@
                             <span class="phone-year">{{ phone.year }}</span>
                         </div>
                         <div class="phone-specs">
-                            <span class="phone-os">{{ phone.os }}</span>
+                            <span class="phone-os">{{ phone.shell }}</span>
                             <span class="phone-screen">{{ phone.screen }}</span>
                         </div>
                         <div class="phone-storage">{{ phone.storage }}</div>
